@@ -1,0 +1,62 @@
+\documentclass{article}
+\usepackage{bm}
+\usepackage{tikz}
+
+\usepackage[psfixbb,graphics,tightpage,active]{preview}
+\PreviewEnvironment{tikzpicture}
+\usepgflibrary{arrows.spaced}
+
+\newcommand{\unit}[2]{\bm{\hat{#1}_{#2}}}
+
+\pgfmathsetmacro{\axlen}{1.5}
+\pgfmathsetmacro{\arcrad}{1.25}
+\pgfmathsetmacro{\vphi}{20}
+\pgfmathsetmacro{\deltaz}{1.5}
+
+\begin{document}
+\begin{tikzpicture}[
+    x={(0.707cm,0.707cm)},y={(0cm,1cm)},z={(1cm,0cm)}
+  , scale=1.5,
+  , >=stealth'
+  , axis/.style={<->}
+  , unit/.style={->,thick}
+  , lab/.style={blue}
+  , probe/.style={red}
+  ]
+
+\coordinate (O_q) at (0,0,-\deltaz); % lab origin
+\coordinate (O_p) at (0,0, \deltaz); % probe origin
+
+% shared z axis with break
+\draw[axis,<-spaced |] (O_q) ++(0,0,-\axlen) -- (0,0,0);
+\draw[axis,<-spaced |] (O_p) ++(0,0, \axlen) -- (0,0,0);
+
+% lab axes
+\draw[axis] (O_q) +(-\axlen,0,0) -- +(\axlen,0,0);
+\draw[axis] (O_q) +(0,-\axlen,0) -- +(0,\axlen,0);
+
+% translated lab axes
+\draw[axis] (O_p) +(-\axlen,0,0) -- +(\axlen,0,0);
+\draw[axis] (O_p) +(0,-\axlen,0) -- +(0,\axlen,0);
+
+% lab unit vectors
+\draw[unit,lab] (O_q) -- +(1,0,0) node[below right]{$\unit{x}{q}$};
+\draw[unit,lab] (O_q) -- +(0,1,0) node[left]       {$\unit{y}{q}$};
+\draw[unit,lab] (O_q) -- +(0,0,1) node[below]      {$\unit{z}{q}$};
+
+% probe y axis
+\draw[probe,densely dashed] (O_p) +(90+\vphi:-\axlen) -- +(90+\vphi:\axlen);
+
+% probe unit vectors
+\draw[unit,probe] (O_p) -- +(\vphi:-1)   node[below right]{$\unit{x}{p}$};
+\draw[unit,probe] (O_p) -- +(90+\vphi:1) node[left]       {$\unit{y}{p}$};
+\draw[unit,probe] (O_p) -- +(0,0,-1)     node[below]      {$\unit{z}{p}$};
+
+% phi arc
+\draw[->,probe] (O_p) +(0,\arcrad,0) arc (90:90+\vphi:\arcrad) node[midway, above]{$\varphi$};
+
+\draw[lab,fill] (O_q) circle[radius=0.3mm] node [below right] {$\mathcal{O}_q$};
+\draw[probe,fill] (O_p) circle[radius=0.3mm] node [below right] {$\mathcal{O}_p$};
+
+\end{tikzpicture}
+\end{document}
